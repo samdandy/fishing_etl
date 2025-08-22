@@ -13,15 +13,8 @@ if __name__ == "__main__":
     initialize_logging()
     start_time = time.time()
     logger = logging.getLogger("FISH")
-    # if ARGS.load_game:
-    #     logger.info("Loading BATS game data")
-    #     get_game(secret_client=secret_client, on_prem_backfill=on_prem_backfill)
-    # if ARGS.load_video:
-    #     logger.info("Loading BATS video data")
-    #     get_video(secret_client=secret_client, on_prem_backfill=on_prem_backfill)
-
-    # end_time = time.time()
-    # run_time = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
-    # logger.info(f"Run time: {run_time}")
-    # logger.info("BATS ETL process completed")
-    # logger.info("Exiting BATS")
+    end_time = time.time()
+    run_time = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
+    logger.info(f"Run time: {run_time}")
+    logger.info("FISH ETL process completed")
+    logger.info("Exiting FISH")
