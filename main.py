@@ -4,10 +4,13 @@ import time
 from datetime import datetime
 from utils.log import initialize_logging
 from etl_logic.nws.weather import get_weather_forecast
-
-parser = argparse.ArgumentParser(prog="BATS", description="Loads BATS data")
+from etl_logic.brazos_river.flow_rate import get_flow_rate
+parser = argparse.ArgumentParser(prog="FISH", description="Loads FISH data")
 
 parser.add_argument("--load-weather", action="store_true", help="Load weather data from NWS")
+
+
+parser.add_argument("--load-flow-rate", action="store_true", help="Load flow rate data from Brazos River Authority")
 ARGS = parser.parse_args()
 
 
@@ -17,7 +20,8 @@ if __name__ == "__main__":
     logger = logging.getLogger("FISH")
     if ARGS.load_weather:
         data = get_weather_forecast()
-        print(data)
+    if ARGS.load_flow_rate:
+        data = get_flow_rate()
     end_time = time.time()
     run_time = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
     logger.info(f"Run time: {run_time}")
