@@ -38,9 +38,9 @@ class FishDatabase:
             Name of the Postgres table
         data : pl.DataFrame
             Polars DataFrame to insert/merge
-        conflict_columns : list[str]
+        delete_columns : list[str]
             Columns to check conflicts on (usually primary keys or unique keys)
-        update_columns : list[str], optional
+        primary_key_columns : list[str], optional
 
         """
         records = list(data.iter_rows())
