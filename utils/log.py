@@ -8,7 +8,6 @@ def initialize_logging():
         "%(asctime)s [%(name)s] [%(levelname)s] %(message)s"
     )
 
-
     # Console handler (info+ only)
     console_handler = logging.StreamHandler(stdout)
     console_handler.setLevel(logging.INFO)
