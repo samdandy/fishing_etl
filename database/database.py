@@ -27,7 +27,6 @@ class FishDatabase:
             print(f"Error connecting to PostgreSQL: {e}")
             return None
 
-    
     def merge_dataframe(self, table_name: str, data: pl.DataFrame, delete_columns: list[str], primary_key_columns: list[str] = None):
         """
         Merge a Polars DataFrame into a Postgres table (UPSERT).
@@ -45,8 +44,6 @@ class FishDatabase:
         """
         records = list(data.iter_rows())
         columns = list(data.columns)
-        for record in records:
-            print(record)
         
         try:
             with self.connection.cursor() as cur:
@@ -56,11 +53,9 @@ class FishDatabase:
                     where_clause = f"({', '.join(delete_columns)}) IN %s"
 
                     delete_sql = f"DELETE FROM {table_name} WHERE {where_clause}"
-                    print(delete_sql)
                     cur.execute(delete_sql, (tuple(delete_values),))
                     print(f"Deleted {cur.rowcount} existing rows from {table_name}")
 
-                    # Step 2: Insert all rows
                     insert_sql = f"""
                         INSERT INTO {table_name} ({", ".join(columns)})
                         VALUES %s

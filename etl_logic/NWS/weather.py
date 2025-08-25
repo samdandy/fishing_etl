@@ -34,11 +34,11 @@ def transform_weather_data(data):
             "wind_direction_weight": wind_direction_weight,
             "created_at_central": run_time,
         })
-        print(f"Transformed weather data: {weather_data[-1]}")
     return pl.DataFrame(weather_data)
 
 def get_weather_forecast():
     db = database.FishDatabase()
     weather_data = fetch_weather_data(NWS_API_URL)
     db.merge_dataframe("weather.nws_wind", transform_weather_data(weather_data), delete_columns=["start_time_central","end_time_central"], primary_key_columns=["start_time_central","end_time_central"])
+    db.close_connection()
     return

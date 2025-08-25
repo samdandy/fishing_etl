@@ -52,5 +52,6 @@ def get_flow_rate() -> pl.DataFrame:
     db = database.FishDatabase()
     df = fetch_flow_rate_data()
     db.merge_dataframe("river.bra_flow_rate", transform_flow_rate_data(df, "West Columbia, TX"), delete_columns=["reading_time_central"], primary_key_columns=["reading_time_central"])
+    db.close_connection()
     return
  
