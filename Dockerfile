@@ -1,11 +1,10 @@
-FROM python:3.11-slim
+
+FROM public.ecr.aws/lambda/python:3.11
 
 COPY . .
 
-RUN apt-get update
-
-RUN apt-get -y clean
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "main.py"]
+COPY . ${LAMBDA_TASK_ROOT}
+
+CMD ["main.lambda_handler"]
