@@ -1,11 +1,10 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 import polars as pl
 from database import database
 from etl_logic.brazos_river.util import grade_flow_rate
 
-OUTPUT_FILE = "flow_rate.txt"
-
+OUTPUT_FILE = "/tmp/flow_rate.txt"
 
 def transform_flow_rate_data(df: pl.DataFrame, location:str) -> pl.DataFrame:
     return (
