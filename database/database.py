@@ -1,5 +1,4 @@
 import psycopg2
-from psycopg2 import sql
 import os
 import polars as pl
 from psycopg2.extras import execute_values
