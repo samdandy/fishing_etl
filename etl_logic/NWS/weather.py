@@ -20,8 +20,9 @@ def transform_weather_data(data):
     periods = data.get("properties", {}).get("periods", [])
     weather_data = []
     for period in periods:
-        start_time_central = datetime.fromisoformat(period["startTime"])
-        end_time_central = datetime.fromisoformat(period["endTime"])
+
+        start_time_central = datetime.fromisoformat(period["startTime"]).replace(tzinfo=None)
+        end_time_central = datetime.fromisoformat(period["endTime"]).replace(tzinfo=None)
         wind_speed_weight = get_wind_speed_weight(period["windSpeed"].split(" ")[0])
         wind_direction_weight = wind_direction_weights.get(period["windDirection"], 0)
         weather_data.append({
