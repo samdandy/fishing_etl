@@ -9,13 +9,17 @@ from etl_logic.brazos_river.flow_rate import get_flow_rate
 parser = argparse.ArgumentParser(prog="FISH", description="Loads FISH data")
 parser.add_argument("--load-weather", action="store_true", help="Load weather data from NWS")
 parser.add_argument("--load-flow-rate", action="store_true", help="Load flow rate data from Brazos River Authority")
+parser.add_argument("--start-date", type=str, help="Start date for data loading in YYYY-MM-DD format")
+parser.add_argument("--end-date", type=str, help="End date for data loading in YYYY-MM-DD format")
 ARGS = parser.parse_args()
 
 def run_etl_process():
+    start_date = ARGS.start_date
+    end_date = ARGS.end_date
     if ARGS.load_weather:
         get_weather_forecast()
     if ARGS.load_flow_rate:
-        get_flow_rate()
+        get_flow_rate(start_date, end_date)
 
 def lambda_handler(event=None, context=None):
     """
