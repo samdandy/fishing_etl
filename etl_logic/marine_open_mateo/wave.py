@@ -29,7 +29,6 @@ def get_wave_forecast():
     db = database.FishDatabase()
     wave_data = fetch_wave_data(MARINE_OPEN_MATEO_API_URL)
     transformed_data = transform_wave_data(wave_data)
-    print(transformed_data)
     db.merge_dataframe("weather.open_mateo_wave", transformed_data, delete_columns=["time_central","location"], primary_key_columns=["time_central","location"])
     db.close_connection()
     return
