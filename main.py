@@ -6,13 +6,29 @@ from utils.log import initialize_logging
 from etl_logic.nws.weather import get_weather_forecast
 from etl_logic.brazos_river.flow_rate import get_flow_rate
 from etl_logic.marine_open_mateo.wave import get_wave_forecast
+
 parser = argparse.ArgumentParser(prog="FISH", description="Loads FISH data")
-parser.add_argument("--load-weather", action="store_true", help="Load weather data from NWS")
-parser.add_argument("--load-flow-rate", action="store_true", help="Load flow rate data from Brazos River Authority")
-parser.add_argument("--load-wave-data", action="store_true", help="Load wave data from Marine Open Meteo")
-parser.add_argument("--start-date", type=str, help="Start date for data loading in YYYY-MM-DD format")
-parser.add_argument("--end-date", type=str, help="End date for data loading in YYYY-MM-DD format")
+parser.add_argument(
+    "--load-weather", action="store_true", help="Load weather data from NWS"
+)
+parser.add_argument(
+    "--load-flow-rate",
+    action="store_true",
+    help="Load flow rate data from Brazos River Authority",
+)
+parser.add_argument(
+    "--load-wave-data",
+    action="store_true",
+    help="Load wave data from Marine Open Meteo",
+)
+parser.add_argument(
+    "--start-date", type=str, help="Start date for data loading in YYYY-MM-DD format"
+)
+parser.add_argument(
+    "--end-date", type=str, help="End date for data loading in YYYY-MM-DD format"
+)
 ARGS = parser.parse_args()
+
 
 def run_etl_process():
     start_date = ARGS.start_date
@@ -23,6 +39,7 @@ def run_etl_process():
         get_flow_rate(start_date, end_date)
     if ARGS.load_wave_data:
         get_wave_forecast()
+
 
 def lambda_handler(event=None, context=None):
     """
@@ -42,6 +59,7 @@ def lambda_handler(event=None, context=None):
     logger.info("FISH ETL process completed (Lambda)")
 
     return {"status": "success", "run_time": str(run_time)}
+
 
 if __name__ == "__main__":
     initialize_logging()

@@ -4,9 +4,7 @@ from sys import stdout
 
 
 def initialize_logging():
-    formatter = logging.Formatter(
-        "%(asctime)s [%(name)s] [%(levelname)s] %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s [%(name)s] [%(levelname)s] %(message)s")
 
     # Console handler (info+ only)
     console_handler = logging.StreamHandler(stdout)

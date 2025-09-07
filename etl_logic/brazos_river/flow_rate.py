@@ -6,23 +6,27 @@ from etl_logic.brazos_river.util import grade_flow_rate
 
 OUTPUT_FILE = "/tmp/flow_rate.txt"
 
-def transform_flow_rate_data(df: pl.DataFrame, location:str) -> pl.DataFrame:
+
+def transform_flow_rate_data(df: pl.DataFrame, location: str) -> pl.DataFrame:
     return (
-        df.rename({"Reading": "reading_time_central","Value": "flow_rate","Unit": "unit"})  
-          .with_columns([
-              pl.col("flow_rate")
-                .str.replace_all(",", "")     
-                .cast(pl.Float64),
-             pl.lit(datetime.now()).alias("created_at_central"),
-             pl.lit(location).alias("location_name"),
-             pl.col("flow_rate")
+        df.rename(
+            {"Reading": "reading_time_central", "Value": "flow_rate", "Unit": "unit"}
+        )
+        .with_columns(
+            [
+                pl.col("flow_rate").str.replace_all(",", "").cast(pl.Float64),
+                pl.lit(datetime.now()).alias("created_at_central"),
+                pl.lit(location).alias("location_name"),
+                pl.col("flow_rate")
                 .str.replace_all(",", "")
                 .cast(pl.Float64)
                 .map_elements(grade_flow_rate, return_dtype=pl.Float64)
                 .alias("flow_rate_weight"),
-          ])
-          .drop(["Receive", "Data Quality"])  
+            ]
+        )
+        .drop(["Receive", "Data Quality"])
     )
+
 
 def fetch_flow_rate_data(start_date=None, end_date=None) -> pl.DataFrame:
     start_date = start_date if start_date else datetime.now().date() - timedelta(days=1)
@@ -37,13 +41,13 @@ def fetch_flow_rate_data(start_date=None, end_date=None) -> pl.DataFrame:
     try:
         response = requests.get(URL)
         response.raise_for_status()
-        with open(OUTPUT_FILE, 'wb') as f:
+        with open(OUTPUT_FILE, "wb") as f:
             f.write(response.content)
         df = pl.read_csv(OUTPUT_FILE, separator="\t")
         return df
     except requests.exceptions.RequestException as e:
         print(f"Error downloading file: {e}")
-        return 
+        return
     except ValueError as ve:
         print(f"Error reading Excel file: {ve}")
     except KeyError as ke:
@@ -53,7 +57,11 @@ def fetch_flow_rate_data(start_date=None, end_date=None) -> pl.DataFrame:
 def get_flow_rate(start_date=None, end_date=None):
     db = database.FishDatabase()
     df = fetch_flow_rate_data(start_date, end_date)
-    db.merge_dataframe("river.bra_flow_rate", transform_flow_rate_data(df, "West Columbia, TX"), delete_columns=["reading_time_central"], primary_key_columns=["reading_time_central"])
+    db.merge_dataframe(
+        "river.bra_flow_rate",
+        transform_flow_rate_data(df, "West Columbia, TX"),
+        delete_columns=["reading_time_central"],
+        primary_key_columns=["reading_time_central"],
+    )
     db.close_connection()
     return
- 
