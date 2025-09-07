@@ -1,4 +1,4 @@
-psycopg2-binary
-bs4
+psycopg[binary]
+beautifulsoup4
 polars
 requests

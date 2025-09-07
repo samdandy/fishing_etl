@@ -35,7 +35,7 @@ def lambda_handler(event=None, context=None):
     # Always run both in Lambda (or inspect event to decide)
     get_weather_forecast()
     get_flow_rate()
-
+    get_wave_forecast()
     end_time = time.time()
     run_time = datetime.fromtimestamp(end_time) - datetime.fromtimestamp(start_time)
     logger.info(f"Run time: {run_time}")
